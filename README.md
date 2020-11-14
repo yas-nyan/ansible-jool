@@ -9,7 +9,7 @@ This is an ansible role for install and bootstrap Jool (is an Open Source SIIT a
 [Ansible Galaxy Project Page](https://galaxy.ansible.com/yas_nyan/jool)
 
 ```
-ansible-galaxy install yas_nyan.jool
+ansible-galaxy install yas_nyan.ansible_jool
 ```
 
 ## Requirements
@@ -32,7 +32,7 @@ ENABLED_MODE: "jool" # or jool_siit
 - hosts: routers
   become: true
   roles:
-    - yas_nyan.jool
+    - yas_nyan.ansible_jool
 
 ```
 
