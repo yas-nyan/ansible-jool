@@ -1,0 +1,64 @@
+- name: Generic | install dependency
+  apt: 
+    name:
+      - build-essential
+      - pkg-config
+      - "linux-headers-{{ ansible_kernel }}"
+      - libnl-genl-3-dev
+      - libxtables-dev
+      - dkms
+      - autoconf
+      - libtool
+      - git
+    update_cache: yes
+    cache_valid_time: 3600
+
+
+- name: Kernel module | download kernel module
+  get_url: 
+    url: "https://www.jool.mx/download/jool-dkms_{{ JOOL_VER }}-1_all.deb"
+    dest: "/tmp/jool_module.deb"
+
+- name: Kernel module | install kernel module
+  apt: 
+    deb: /tmp/jool_module.deb
+
+
+- name: User space tools | clone jool repo
+  git:
+    repo: "https://github.com/NICMx/Jool.git"
+    dest: "/tmp/Jool"
+    version: "v{{ JOOL_VER }}"
+
+- name: User space tools  | autogen user-space tool
+  shell:
+    cmd: ./autogen.sh
+    chdir: "/tmp/Jool"
+
+
+- name: User space tools  | configure user-space tool
+  shell:
+    cmd: ./configure
+    chdir: "/tmp/Jool"
+
+- name: User space tools  | make user-space tool
+  make:
+     chdir:  "/tmp/Jool"
+
+- name: User space tools | make user-space tool
+  make:
+     chdir:  "/tmp/Jool"
+     target: install
+
+
+- name: "modprobe | enable {{ ENABLED_MODE }} module"
+  modprobe:
+    name: {{ ENABLED_MODE }}
+    state: present
+
+- name: "modprobe | enable {{ ENABLED_MODE }} module"
+  lineinfile:
+    path: /etc/modules
+    line: {{ ENABLED_MODE }}
+    state: present
+    create: no
