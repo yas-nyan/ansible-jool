@@ -51,14 +51,14 @@
      target: install
 
 
-- name: "modprobe | enable {{ ENABLED_MODE }} module"
+- name: "modprobe | enable module"
   modprobe:
-    name: {{ ENABLED_MODE }}
+    name: "{{ ENABLED_MODE }}"
     state: present
 
-- name: "modprobe | enable {{ ENABLED_MODE }} module"
+- name: "modprobe | make it permanent module"
   lineinfile:
     path: /etc/modules
-    line: {{ ENABLED_MODE }}
+    line: "{{ ENABLED_MODE }}"
     state: present
     create: no
